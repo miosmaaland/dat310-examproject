@@ -1,85 +1,94 @@
+/* Fonts */
+@import url('https://fonts.googleapis.com/css?family=Poppins&display=swap');
+
+/* Colors */
+:root {
+  --background-color: #f5f5f5;
+  --primary-color: #3f51b5;
+  --secondary-color: #ff4081;
+  --text-color: #333;
+}
+
+/* Typography */
 body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f0f0f0;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--text-color);
 }
 
-h1 {
-  text-align: center;
-  font-size: 3em;
-  margin-top: 2em;
-}
-
-form {
-  margin: 2em auto;
-  width: 80%;
-  max-width: 600px;
-  padding: 2em;
-  border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-label {
-  display: block;
+h1, h2, h3, h4, h5, h6 {
   font-weight: bold;
-  margin-bottom: 0.5em;
+  font-family: 'Poppins', sans-serif;
+  color: var(--primary-color);
 }
 
-select {
-  display: block;
+/* Layout */
+table {
+  border-collapse: separate;
+  border-spacing: 0 12px;
   width: 100%;
-  padding: 0.5em;
-  margin-bottom: 1em;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  margin-bottom: 2em;
+  background-color: var(--background-color);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0,0,0,.1);
 }
 
-button[type="submit"] {
-  display: block;
-  margin: 2em auto 0;
-  padding: 0.5em 1em;
-  border-radius: 5px;
-  background-color: #4CAF50;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-}
-
-button[type="submit"]:hover {
-  background-color: #3e8e41;
-}
-
-header {
-  background-color: #333;
-  color: #fff;
+th, td {
   padding: 1em;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+  text-align: center;
 }
 
-nav ul {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+th {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  border-radius: 20px 20px 0 0;
+}
+
+td {
+  background-color: #fff;
+  color: var(--text-color);
+  border-radius: 0 0 20px 20px;
+}
+
+/* Navigation */
+nav {
+  background-color: var(--primary-color);
+  color: var(--background-color);
   display: flex;
-  justify-content: space-around;
-}
-
-nav li {
-  margin: 0 0.5em;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1em;
+  border-radius: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,.1);
 }
 
 nav a {
-  color: #fff;
+  color: var(--background-color);
   text-decoration: none;
   font-weight: bold;
-  padding: 0.5em;
+  font-size: 20px;
+  transition: all 0.2s ease-in-out;
 }
 
 nav a:hover {
-  background-color: #555;
+  transform: scale(1.05);
+}
+
+button {
+  background-color: var(--secondary-color);
+  color: var(--background-color);
+  border: none;
+  border-radius: 30px;
+  padding: 0.75em 1.5em;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: #f50057;
+  transform: scale(1.05);
 }
