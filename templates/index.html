@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>TV Series Tips</title>
     <link rel="stylesheet" type="text/css" href="../static/style.css">
-
   </head>
   <body>
     <h1>TV Series Tips</h1>
@@ -31,18 +30,19 @@
       <br><br>
       <button type="submit">Search</button>
     </form>
-
-    <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>TV Series Tips</title>
-  </head>
-  <body>
-    <h1>TV Series Tips</h1>
-    <a href="{{ url_for('login') }}">Login</a>
-  </body>
-</html>
-
+    
+    <header>
+      <nav>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Home</a></li>
+          {% if current_user.is_authenticated %}
+            <li><a href="{{ url_for('search') }}">Search</a></li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          {% else %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
   </body>
 </html>

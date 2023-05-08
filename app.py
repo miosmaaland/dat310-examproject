@@ -1,139 +1,141 @@
-from flask import Flask, jsonify, request, session, redirect, url_for
-import os
-import json
+from flask import Flask, render_template, request, redirect, url_for
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
+from werkzeug.security import generate_password_hash, check_password_hash
+import sqlite3
 
+# Create the Flask app
 app = Flask(__name__)
-app.secret_key = 'super secret key'
+app.secret_key = 'my_secret_key'
 
-DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
-CONTACTS_FILE = os.path.join(DATA_DIR, "contacts.json")
-USERS_FILE = os.path.join(DATA_DIR, "users.json")
+# Setup the login manager
+login_manager = LoginManager()
+login_manager.init_app(app)
 
+# User model
+class User(UserMixin):
+    def __init__(self, id):
+        self.id = id
 
-def create_file_if_not_exists(filename):
-    if not os.path.exists(filename):
-        try:
-            with open(filename, "w") as f:
-                json.dump({}, f)
-        except:
-            print(f"Error creating file {filename}")
-    else:
-        print(f"File {filename} already exists")
+@login_manager.user_loader
+def load_user(user_id):
+    return User(user_id)
 
+# Login page
+# Index page
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-def read_json_file(filename):
-    with open(filename, "r") as f:
-        data = json.load(f)
-    return data
-
-
-def initialize_files():
-    global users, address_book
-    users = read_json_file(USERS_FILE)
-    address_book = read_json_file(CONTACTS_FILE)
-
-
-initialize_files()
-
-
-@app.route('/', methods=['GET'])
-def home():
-    if session.get('username'):
-        username = session['username']
-        if username not in address_book:
-            return f"Welcome, {username}!<br><br>You don't have an address book yet.<br><br><a href='/logout'>Logout</a>"
-        else:
-            return f"Welcome, {username}!<br><br>Your address book:<br>{json.dumps(address_book[username])}<br><br><a href='/logout'>Logout</a>"
-    else:
-        return redirect(url_for('login'))
-
-
+# Login page
+# Login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('search'))
+
+    error = None
     if request.method == 'POST':
+        # Check if user exists and password is correct
         username = request.form['username']
         password = request.form['password']
-        if username in users and users[username] == password:
-            session['username'] = username
-            return redirect(url_for('home'))
+        conn = sqlite3.connect('recommendations.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
+        user = cursor.fetchone()
+        conn.close()
+
+        if user is None or not check_password_hash(user[2], password):
+            error = 'Invalid credentials.'
         else:
-            return "Invalid username or password"
-    else:
-        return '''
-               <form method="post">
-                <h2>Login</h2>
-                <p>Username: <input type="text" name="username"></p>
-                <p>Password: <input type="password" name="password"></p>
-                <p><input type="submit" value="Login"></p>
-               </form>
-               '''
+            user_obj = User(user[0])
+            login_user(user_obj)
+            return redirect(url_for('search'))
+
+    return render_template('login.html', error=error)
 
 
-@app.route('/logout', methods=['GET'])
+# Logout
+@app.route('/logout')
 def logout():
-    session.pop('username', None)
-    return redirect(url_for('home'))
+    logout_user()
+    return redirect(url_for('index'))
 
 
-@app.route('/address_book', methods=['GET'])
-def get_address_book():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    username = session['username']
-    if username not in address_book:
-        return "You don't have an address book yet!"
-    return jsonify(address_book[username])
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('search'))
 
+    error = None
+    if request.method == 'POST':
+        # Get the form data
+        username = request.form['username']
+        password = request.form['password']
 
-@app.route('/address_book', methods=['POST'])
-def add_contact():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    username = session['username']
-    if username not in address_book:
-        address_book[username] = {}
-    new_contact = request.get_json()
-    for name, address in new_contact.items():
-        address_book[username][name] = address
-    with open(CONTACTS_FILE, "w") as f:
-        json.dump(address_book, f)
-    return "Contact added successfully!"
-
-
-@app.route('/address_book', methods=['PUT'])
-def edit_contact():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    username = session['username']
-    if username not in address_book:
-        return "You don't have an address book yet!"
-    updated_contact = request.get_json()
-    for name, address in updated_contact.items():
-        if name in address_book[username]:
-            address_book[username][name] = address
+        # Check if the user already exists in the database
+        conn = sqlite3.connect('recommendations.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
+        user = cursor.fetchone()
+        if user:
+            error = 'Username already taken.'
         else:
-            return "Contact not found!"
-    with open(CONTACTS_FILE, "w") as f:
-        json.dump(address_book, f)
-    return "Contact updated successfully!"
+            # Add the new user to the database
+            password_hash = generate_password_hash(password)
+            cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password_hash))
+            conn.commit()
+
+            # Log the new user in
+            user_id = cursor.lastrowid
+            user_obj = User(user_id)
+            login_user(user_obj)
+            return redirect(url_for('search'))
+
+        conn.close()
+    else:
+        return render_template('register.html', error=error)
+
+    return render_template('search.html')
 
 
-@app.route('/address_book', methods=['DELETE'])
-def delete_contact():
-    if 'username' not in session:
+
+
+# Search page
+# Search page
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if not current_user.is_authenticated:
         return redirect(url_for('login'))
-    username = session['username']
-    if username not in address_book:
-        return "You don't have an address book yet!"
-    contact_to_delete = request.get_json()
-    for name in contact_to_delete:
-        if name in address_book[username]:
-            del address_book[username][name]
+
+    if request.method == 'POST':
+        # Get selected options
+        genre = request.form.get('genre')
+        platform = request.form.get('platform')
+
+        # Query the database based on selected options
+        conn = sqlite3.connect('recommendations.db')
+        cursor = conn.cursor()
+        if genre == 'all' and platform == 'all':
+            cursor.execute('SELECT * FROM series ORDER BY RANDOM() LIMIT 1')
+        elif genre == 'all':
+            cursor.execute('SELECT * FROM series WHERE platform = ? ORDER BY RANDOM() LIMIT 1', (platform,))
+        elif platform == 'all':
+            cursor.execute('SELECT * FROM series WHERE genre = ? ORDER BY RANDOM() LIMIT 1', (genre,))
         else:
-            return "Contact not found!"
-    with open(CONTACTS_FILE, "w") as f:
-        json.dump(address_book, f)
-    return "Contact deleted successfully!"
+            cursor.execute('SELECT * FROM series WHERE genre = ? AND platform = ? ORDER BY RANDOM() LIMIT 1', (genre, platform))
+
+        series = cursor.fetchone()
+        conn.close()
+
+        if series is None:
+            return render_template('search.html', error='No series found.')
+
+        return render_template('search.html', series=series)
+
+    return render_template('search.html')
+
+
+
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, port = 38943)
