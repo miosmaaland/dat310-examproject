@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>TV Series Tips</title>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+
+  </head>
+  <body>
+    <h1>TV Series Tips</h1>
+    <form method="post" action="/search">
+      <label for="genre">Genre:</label>
+      <select id="genre" name="genre">
+        <option value="all">All</option>
+        <option value="comedy">Comedy</option>
+        <option value="drama">Drama</option>
+        <option value="action">Action</option>
+        <option value="horror">Horror</option>
+        <option value="romantic">Romantic</option>
+      </select>
+      <br><br>
+      <label for="platform">Streaming Platform:</label>
+      <select id="platform" name="platform">
+        <option value="all">All</option>
+        <option value="netflix">Netflix</option>
+        <option value="amazon">Amazon Prime</option>
+        <option value="hulu">Hulu</option>
+        <option value="Disney +">Disney +</option>
+        <option value="Tv2 play">TV2 Play</option>
+      </select>
+      <br><br>
+      <button type="submit">Search</button>
+    </form>
+
+    <!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>TV Series Tips</title>
+  </head>
+  <body>
+    <h1>TV Series Tips</h1>
+    <a href="{{ url_for('login') }}">Login</a>
+  </body>
+</html>
+
+  </body>
+</html>

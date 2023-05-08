@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>TV Series Tips - Search Results</title>
+  </head>
+  <body>
+    <h1>TV Series Tips - Search Results</h1>
+    {% if search_results %}
+      <h2>Results:</h2>
+      <ul>
+        {% for result in search_results %}
+          <li>{{ result }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No results found.</p>
+    {% endif %}
+    <br>
+    <a href="/">Back to search</a>
+  </body>
+</html>
