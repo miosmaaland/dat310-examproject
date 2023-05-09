@@ -3,6 +3,7 @@ from flask_login import LoginManager, UserMixin, login_user, logout_user, curren
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import re
+import jsonify
 
 # Create the Flask app
 app = Flask(__name__)
@@ -23,9 +24,15 @@ def load_user(user_id):
 
 # Login page
 # Index page
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
+    if request.method == 'POST':
+        genre = request.form['genre']
+        platform = request.form['platform']
+        return redirect(url_for('search', genre=genre, platform=platform))
+    else:
+        return render_template('index.html')
+
 
 # Login page
 # Login page
@@ -107,40 +114,67 @@ def register():
 
 # Search page
 # Search page
-@app.route('/search', methods=['GET', 'POST'])
+@app.route('/search')
 def search():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login'))
+    # Get the values of the genre and platform parameters
+    genre = request.args.get('genre', '')
+    platform = request.args.get('platform', '')
 
-    if request.method == 'POST':
-        # Get selected options
-        genre = request.form.get('genre')
-        platform = request.form.get('platform')
+    # Connect to database
+    conn = sqlite3.connect('recommendations.db')
+    c = conn.cursor()
 
-        # Query the database based on selected options
-        conn = sqlite3.connect('recommendations.db')
-        cursor = conn.cursor()
-        if genre == 'all' and platform == 'all':
-            cursor.execute('SELECT * FROM series ORDER BY RANDOM() LIMIT 1')
-        elif genre == 'all':
-            cursor.execute('SELECT * FROM series WHERE platform = ? ORDER BY RANDOM() LIMIT 1', (platform,))
-        elif platform == 'all':
-            cursor.execute('SELECT * FROM series WHERE genre = ? ORDER BY RANDOM() LIMIT 1', (genre,))
-        else:
-            cursor.execute('SELECT * FROM series WHERE genre = ? AND platform = ? ORDER BY RANDOM() LIMIT 1', (genre, platform))
+    # Build the query based on the parameters
+    query = 'SELECT * FROM series'
+    if genre and platform:
+        query += f" WHERE genre='{genre}' AND platform='{platform}'"
+    elif genre:
+        query += f" WHERE genre='{genre}'"
+    elif platform:
+        query += f" WHERE platform='{platform}'"
 
-        series = cursor.fetchone()
-        conn.close()
+    # Execute the query and get the results
+    c.execute(query)
+    series = [{'title': row[1], 'genre': row[2], 'platform': row[3]} for row in c.fetchall()]
 
-        if series is None:
-            return render_template('search.html', error='No series found.')
+    # Close database connection
+    conn.close()
 
-        return render_template('search.html', series=series)
+    # Return the results as JSON if the request type is application/json, else render the template
+    if request.is_json:
+        return jsonify(series)
+    else:
+        return render_template('results.html', series=series)
 
-    return render_template('search.html')
+@app.route('/series')
+def get_series():
+    # Get the selected genre and platform
+    genre = request.args.get('genre', 'all')
+    platform = request.args.get('platform', 'all')
+
+    # Query the database based on selected options
+    conn = sqlite3.connect('recommendations.db')
+    cursor = conn.cursor()
+    if genre == 'all' and platform == 'all':
+        cursor.execute('SELECT * FROM series ORDER BY RANDOM() LIMIT 1')
+    elif genre == 'all':
+        cursor.execute('SELECT * FROM series WHERE platform = ? ORDER BY RANDOM() LIMIT 1', (platform,))
+    elif platform == 'all':
+        cursor.execute('SELECT * FROM series WHERE genre = ? ORDER BY RANDOM() LIMIT 1', (genre,))
+    else:
+        cursor.execute('SELECT * FROM series WHERE genre = ? AND platform = ? ORDER BY RANDOM() LIMIT 1', (genre, platform))
+
+    series = cursor.fetchone()
+    conn.close()
+
+    if series is None:
+        return jsonify(error='No series found.')
+
+    #
+
 
 
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port = 38943)
+    app.run(debug=True, port = 42373)

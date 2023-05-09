@@ -31,7 +31,36 @@
       <button type="submit">Search</button>
     </form>
     
-    <header>
+    <header><!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Movie Recommendations</title>
+</head>
+<body>
+    <h1>Movie Recommendations</h1>
+    <form method="POST">
+        <label for="genre">Genre:</label>
+        <select id="genre" name="genre">
+            <option value="">All</option>
+            <option value="Action">Action</option>
+            <option value="Comedy">Comedy</option>
+            <option value="Drama">Drama</option>
+        </select>
+        <br>
+        <label for="platform">Platform:</label>
+        <select id="platform" name="platform">
+            <option value="">All</option>
+            <option value="Netflix">Netflix</option>
+            <option value="Hulu">Hulu</option>
+            <option value="Prime Video">Prime Video</option>
+        </select>
+        <br>
+        <input type="submit" value="Search">
+    </form>
+</body>
+</html>
+
       <nav>
         <ul>
           <li><a href="{{ url_for('index') }}">Home</a></li>
