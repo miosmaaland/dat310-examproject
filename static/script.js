@@ -1,109 +1,75 @@
-// Get elements from the DOM
-const form = document.querySelector('form');
-const usernameInput = document.querySelector('input[name="username"]');
-const passwordInput = document.querySelector('input[name="password"]');
-const addressBookContainer = document.querySelector('#address-book-container');
+// When the page is loaded
+window.addEventListener('load', function() {
+  // Get the form element
+  const form = document.querySelector('form');
 
-// Handle form submission for logging in
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  const formData = new FormData(form);
-  const username = formData.get('username');
-  const password = formData.get('password');
+  // Add an event listener to the form
+  form.addEventListener('submit', function(event) {
+    // Prevent the form from submitting
+    event.preventDefault();
 
-  const response = await fetch('/login', {
-    method: 'POST',
-    body: JSON.stringify({ username, password }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
+    // Get the selected genre and platform
+    const genre = document.querySelector('[name="genre"]').value;
+    const platform = document.querySelector('[name="platform"]').value;
+
+    // Make a GET request to the server to get the movies
+    fetch(`/movies?genre=${genre}&platform=${platform}`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(movies => {
+        // Update the DOM with the movies information
+        const moviesContainer = document.querySelector('.movies-container');
+        moviesContainer.innerHTML = '';
+
+        movies.forEach(movie => {
+          const movieEl = document.createElement('div');
+          movieEl.classList.add('movie');
+
+          const titleEl = document.createElement('h2');
+          titleEl.textContent = movie.title;
+          movieEl.appendChild(titleEl);
+
+          const descriptionEl = document.createElement('p');
+          descriptionEl.textContent = movie.description;
+          movieEl.appendChild(descriptionEl);
+
+          const imageEl = document.createElement('img');
+          imageEl.setAttribute('src', movie.image_url);
+          imageEl.setAttribute('alt', movie.title);
+          movieEl.appendChild(imageEl);
+
+          moviesContainer.appendChild(movieEl);
+          app.get('/movies', function(req, res) {
+            const genre = req.query.genre;
+            const platform = req.query.platform;
+          
+            const query = `SELECT * FROM movies WHERE genre = '${genre}' AND platform = '${platform}'`;
+          
+            db.all(query, [], function(err, rows) {
+              if (err) {
+                console.error(err.message);
+                res.status(500).send('Internal server error');
+                return;
+              }
+          
+              if (rows.length == 0) {
+                res.status(404).send('No movies found for the given genre and platform');
+                return;
+              }
+          
+              // Send the movie data as a JSON response
+              res.json(rows);
+            });
+          });
+          
+        });
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
   });
-
-  const data = await response.json();
-  if (response.ok) {
-    // Redirect to the home page
-    window.location.replace('/');
-  } else {
-    // Display an error message
-    alert(data.message);
-  }
 });
-
-// Get the address book for the logged-in user
-async function getAddressBook() {
-  const response = await fetch('http://127.0.0.1:5000/');
-  const data = await response.json();
-  if (response.ok) {
-    // Display the address book
-    let html = '';
-    for (const name in data) {
-      const address = data[name];
-      html += `<div><strong>${name}:</strong> ${address}</div>`;
-    }
-    addressBookContainer.innerHTML = html;
-  } else {
-    // Display an error message
-    addressBookContainer.innerHTML = `<div>${data.message}</div>`;
-  }
-}
-
-// Add a new contact to the address book
-async function addContact(name, address) {
-  const response = await fetch('/address_book', {
-    method: 'POST',
-    body: JSON.stringify({ [name]: address }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-
-  const data = await response.json();
-  if (response.ok) {
-    // Refresh the address book
-    getAddressBook();
-  } else {
-    // Display an error message
-    alert(data.message);
-  }
-}
-
-// Edit an existing contact in the address book
-async function editContact(name, address) {
-  const response = await fetch('/address_book', {
-    method: 'PUT',
-    body: JSON.stringify({ [name]: address }),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-
-  const data = await response.json();
-  if (response.ok) {
-    // Refresh the address book
-    getAddressBook();
-  } else {
-    // Display an error message
-    alert(data.message);
-  }
-}
-
-// Delete a contact from the address book
-async function deleteContact(name) {
-  const response = await fetch('/address_book', {
-    method: 'DELETE',
-    body: JSON.stringify([name]),
-    headers: {
-      'Content-Type': 'application/json'
-    }
-  });
-
-  const data = await response.json();
-  if (response.ok) {
-    // Refresh the address book
-    getAddressBook();
-  } else {
-    // Display an error message
-    alert(data.message);
-  }
-}
-
