@@ -1,95 +1,121 @@
-:root {
-  --background-color: #f8f8f8;
-  --primary-color: #6c63ff;
-  --secondary-color: #ff7a59;
+/* Global Styles */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f7f7f7;
 }
 
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
 
+h1, h2 {
+  color: #333;
+}
 
+/* Header Styles */
+header {
+  background-color: #333;
+  padding: 10px;
+  color: #fff;
+}
 
-.home-link, .login-link {
-  display: inline-block;
-  font-size: 24px;
-  font-weight: bold;
-  padding: 10px 15px;
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline;
   margin-right: 10px;
 }
 
-.home-link {
-  background-color: var(--primary-color);
-  color: var(--background-color);
-  border-radius: 25px;
+nav ul li a {
+  color: #fff;
+  text-decoration: none;
 }
 
-.login-link {
-  background-color: var(--secondary-color);
-  color: var(--background-color);
-  border-radius: 25px;
+nav ul li a:hover {
+  text-decoration: underline;
 }
 
-.home-link:hover, .login-link:hover {
-  transform: scale(1);
-}
-
-
-
-.container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 40px;
-  background-color: var(--background-color);
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-/* Form Styling */
+/* Form Styles */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 label {
-  font-weight: bold;
-  margin-right: 10px;
+  display: block;
+  margin-bottom: 5px;
 }
 
+input[type="text"],
+input[type="password"],
 select {
-  padding: 8px 12px;
-  font-size: 16px;
-  border-radius: 5px;
-  border: 1px solid var(--primary-color);
-  background-color: #fff;
-  color: var(--primary-color);
-}
-
-button[type="submit"] {
-  background-color: var(--secondary-color);
-  color: var(--background-color);
-  border: none;
-  border-radius: 30px;
-  padding: 10px 20px;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-}
-
-button[type="submit"]:hover {
-  background-color: #f50057;
-  transform: scale(1.05);
-}
-
-/* Footer Styling */
-footer {
-  background-color: var(--primary-color);
-  color: var(--background-color);
-  padding: 10px;
-  text-align: center;
-  border-radius: 0 0 10px 10px;
-  margin-top: 30px;
-}
-
-footer p {
+  width: 100%;
+  padding: 5px;
   font-size: 14px;
 }
 
+button[type="submit"] {
+  padding: 10px 20px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
 
+button[type="submit"]:hover {
+  background-color: #555;
+}
+
+/* Footer Styles */
+footer {
+  background-color: #333;
+  padding: 10px;
+  color: #fff;
+  text-align: center;
+}
+
+/* Index Page Styles */
+.home-link {
+  font-weight: bold;
+}
+
+.login-link {
+  color: #fff;
+  text-decoration: underline;
+}
+
+/* Search Page Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+th {
+  background-color: #333;
+  color: #fff;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+/* Other Styles */
+.alert-danger {
+  color: #a94442;
+  background-color: #f2dede;
+  border: 1px solid #ebccd1;
+  padding: 10px;
+  margin-bottom: 10px;
+}

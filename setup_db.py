@@ -29,9 +29,13 @@ series = [('Game of Thrones', 'Fantasy', 'HBO'),
           ('Breaking Bad', 'Drama', 'Netflix'),
           ('The Crown', 'Drama', 'Netflix'),
           ('Stranger Things', 'Horror', 'Netflix'),
-          ('The Boys', 'Superhero', 'Amazon Prime')
-          ('Modern Family', 'Feel-good', 'Netflix')
-          ('How I Met Your Mother', 'Comedy', 'Netflix')
+          ('The Boys', 'Superhero', 'Amazon Prime'),
+          ('Modern Family', 'Feel-good', 'Netflix'),
+          ('How I Met Your Mother', 'Comedy', 'Disney +'),
+          ('WestWorld', 'Sci-fi', 'HBO'),
+          ('The Mandalorian', 'Comedy', 'Disney +'),
+          ('Chernobyl', 'Drama', 'HBO'),
+          ('The Big Bang Theory', 'Comedy', 'Netflix'),
           ('Reacher', 'Thriller', 'Amazon Prime')]
 c.executemany('INSERT INTO series (name, genre, platform) VALUES (?, ?, ?)', series)
 
