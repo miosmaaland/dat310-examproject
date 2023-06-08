@@ -1,12 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>Logged Out</title>
-  </head>
-  <body>
-    <h1>You have been logged out</h1>
-    <p>Thank you for using our service. You have been logged out.</p>
-    <a href="/">Return to Homepage</a>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <title>Logged Out</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <h1>You have been logged out</h1>
+  <p>Thank you for using our service. You have been logged out.</p>
+  <a href="/" id="homepage-link">Return to Homepage</a>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      setTimeout(function() {
+        window.location.href = "/";
+      }, 3000);
+    });
+  </script>
+</body>
 </html>

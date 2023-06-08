@@ -1,48 +1,62 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <title>TV Series Tips</title>
-    <link rel="stylesheet" type="text/css" href="../static/style.css">
-  </head>
-  <body>
-    <h1>TV Series Tips</h1>
+<head>
+  <meta charset="UTF-8">
+  <title>GenreFlix</title>
+  <link rel="stylesheet" type="text/css" href="../static/style.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a class="home-link" href="{{ url_for('index') }}">Home</a></li>
+        {% if current_user.is_authenticated %}
+          <li><a href="{{ url_for('search') }}">Search</a></li>
+          <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        {% else %}
+          <li><a class="login-link" href="{{ url_for('login') }}">Login</a></li>
+        {% endif %}
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <h1>Welcome to GenreFlix</h1>
+    <p>Discover and explore your favorite TV series based on genre and streaming platform.</p>
+
     <form method="post" action="/search">
-      <label for="genre">Genre:</label>
-      <select id="genre" name="genre">
-        <option value="all">All</option>
-        <option value="comedy">Comedy</option>
-        <option value="drama">Drama</option>
-        <option value="action">Action</option>
-        <option value="horror">Horror</option>
-        <option value="romantic">Romantic</option>
-      </select>
-      <br><br>
-      <label for="platform">Streaming Platform:</label>
-      <select id="platform" name="platform">
-        <option value="all">All</option>
-        <option value="netflix">Netflix</option>
-        <option value="amazon">Amazon Prime</option>
-        <option value="hulu">Hulu</option>
-        <option value="Disney +">Disney +</option>
-        <option value="Tv2 play">TV2 Play</option>
-      </select>
-      <br><br>
+      <div class="form-group">
+        <label for="genre">Genre:</label>
+        <select id="genre" name="genre">
+          <option value="all">All</option>
+          <option value="comedy">Comedy</option>
+          <option value="drama">Drama</option>
+          <option value="action">Action</option>
+          <option value="horror">Horror</option>
+          <option value="romantic">Romantic</option>
+          <option value="thriller">Thriller</option>
+          <option value="feel-good">Feel-good</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="platform">Streaming Platform:</label>
+        <select id="platform" name="platform">
+          <option value="all">All</option>
+          <option value="netflix">Netflix</option>
+          <option value="amazon">Amazon Prime</option>
+          <option value="hulu">Hulu</option>
+          <option value="disney">Disney+</option>
+          <option value="tv2play">TV2 Play</option>
+        </select>
+      </div>
+
       <button type="submit">Search</button>
     </form>
-    
-    <header>
-      <nav>
-        <ul>
-          <li><a href="{{ url_for('index') }}">Home</a></li>
-          {% if current_user.is_authenticated %}
-            <li><a href="{{ url_for('search') }}">Search</a></li>
-            <li><a href="{{ url_for('logout') }}">Logout</a></li>
-          {% else %}
-            <li><a href="{{ url_for('login') }}">Login</a></li>
-          {% endif %}
-        </ul>
-      </nav>
-    </header>
-  </body>
+  </div>
+
+  <footer>
+    <p>&copy; 2023 TV Series Tips. All rights reserved.</p>
+  </footer>
+</body>
 </html>

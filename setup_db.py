@@ -29,7 +29,10 @@ series = [('Game of Thrones', 'Fantasy', 'HBO'),
           ('Breaking Bad', 'Drama', 'Netflix'),
           ('The Crown', 'Drama', 'Netflix'),
           ('Stranger Things', 'Horror', 'Netflix'),
-          ('The Boys', 'Superhero', 'Amazon Prime')]
+          ('The Boys', 'Superhero', 'Amazon Prime')
+          ('Modern Family', 'Feel-good', 'Netflix')
+          ('How I Met Your Mother', 'Comedy', 'Netflix')
+          ('Reacher', 'Thriller', 'Amazon Prime')]
 c.executemany('INSERT INTO series (name, genre, platform) VALUES (?, ?, ?)', series)
 
 # Commit changes and close database connection
