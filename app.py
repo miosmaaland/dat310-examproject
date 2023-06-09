@@ -233,8 +233,6 @@ def series_list():
     return render_template('series_list.html', series=series)
 
 
-
-
 @app.route('/delete_series', methods=['POST'])
 @login_required
 def delete_series():
@@ -258,6 +256,7 @@ def delete_series():
         flash('Error deleting the series.')
 
     return redirect(url_for('series_list'))
+
 
 @app.route('/submit_series', methods=['POST'])
 @login_required
@@ -303,9 +302,6 @@ def trending():
     conn.close()
 
     return render_template('trending.html', genres=genre_data, platforms=platform_data, series=series_data)
-
-
-
 
 
 if __name__ == '__main__':
