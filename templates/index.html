@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>GenreFlix</title>
-  <link rel="stylesheet" type="text/css" href="../static/style.css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
   <header>
@@ -12,6 +12,7 @@
         <li><a class="home-link" href="{{ url_for('index') }}">Home</a></li>
         {% if current_user.is_authenticated %}
           <li><a href="{{ url_for('search') }}">Search</a></li>
+          <li><a href="{{ url_for('profile') }}">Profile</a></li>
           <li><a href="{{ url_for('logout') }}">Logout</a></li>
         {% else %}
           <li><a class="login-link" href="{{ url_for('login') }}">Login</a></li>
@@ -24,7 +25,8 @@
     <h1>Welcome to GenreFlix</h1>
     <p>Discover and explore your favorite TV series based on genre and streaming platform.</p>
 
-    <form method="post" action="/search">
+    <form method="POST" action="{{ url_for('results') }}">
+
       <div class="form-group">
         <label for="genre">Genre:</label>
         <select id="genre" name="genre">
@@ -32,30 +34,31 @@
           <option value="comedy">Comedy</option>
           <option value="drama">Drama</option>
           <option value="action">Action</option>
-          <option value="horror">Horror</option>
-          <option value="romantic">Romantic</option>
           <option value="thriller">Thriller</option>
-          <option value="feel-good">Feel-good</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label for="platform">Streaming Platform:</label>
-        <select id="platform" name="platform">
-          <option value="all">All</option>
-          <option value="netflix">Netflix</option>
-          <option value="amazon">Amazon Prime</option>
-          <option value="disney">Disney+</option>
-          <option value="tv2play">HBO</option>
-        </select>
-      </div>
-
-      <button type="submit">Search</button>
-    </form>
-  </div>
-
-  <footer>
-    <p>&copy; 2023 TV Series Tips. All rights reserved.</p>
-  </footer>
-</body>
-</html>
+          <option value="sci-fi">Sci-Fi</option>
+          <option value="fantasy">Fantasy</option>
+          </select>
+          </div>
+          
+          
+          
+            <div class="form-group">
+              <label for="platform">Streaming Platform:</label>
+              <select id="platform" name="platform">
+                <option value="all">All</option>
+                <option value="netflix">Netflix</option>
+                <option value="amazon">Amazon Prime Video</option>
+                <option value="hulu">Hulu</option>
+                <option value="disney">Disney+</option>
+                <option value="hbo">HBO Max</option>
+              </select>
+            </div>
+          
+            <button type="submit">Search</button>
+          </form>
+          
+            </div>
+            <script src="{{ url_for('static', filename='script.js') }}"></script>
+          </body>
+          </html>
+          

@@ -1,12 +1,15 @@
-from flask import Flask, render_template, request, redirect, url_for
-from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user
+from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import re
 
-# Create the Flask app
+
 app = Flask(__name__)
 app.secret_key = 'my_secret_key'
+
+
+app.config['SESSION_COOKIE_SECURE'] = False
 
 # Setup the login manager
 login_manager = LoginManager()
@@ -14,25 +17,33 @@ login_manager.init_app(app)
 
 # User model
 class User(UserMixin):
-    def __init__(self, id):
+    def __init__(self, id, username, profile_image=None):
         self.id = id
+        self.username = username
+        self.profile_image = profile_image
+
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User(user_id)
+    conn = sqlite3.connect('recommendations.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT * FROM users WHERE id = ?', (user_id,))
+    user_data = cursor.fetchone()
+    conn.close()
+    if user_data:
+        return User(user_data[0], user_data[1], user_data[2])  
+    return None
 
-# Login page
-# Index page
+
+
 @app.route('/')
 def index():
     return render_template('index.html')
 
-# Login page
-# Login page
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('search'))
+        return redirect(url_for('profile'))
 
     error = None
     if request.method == 'POST':
@@ -42,30 +53,29 @@ def login():
         conn = sqlite3.connect('recommendations.db')
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
-        user = cursor.fetchone()
+        user_data = cursor.fetchone()
         conn.close()
 
-        if user is None or not check_password_hash(user[2], password):
+        if user_data is None or not check_password_hash(user_data[2], password):
             error = 'Invalid credentials.'
         else:
-            user_obj = User(user[0])
-            login_user(user_obj)
-            return redirect(url_for('search'))
+            user = User(user_data[0], user_data[1], user_data[2])
+            login_user(user)
+            return redirect(url_for('profile'))
 
     return render_template('login.html', error=error)
 
-
-# Logout
 @app.route('/logout')
+@login_required
 def logout():
     logout_user()
+    session.clear()
     return redirect(url_for('index'))
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('search'))
+        return redirect(url_for('register'))
 
     error = None
     if request.method == 'POST':
@@ -73,7 +83,7 @@ def register():
         username = request.form['username']
         password = request.form['password']
 
-        # Check if the user already exists in the database
+       
         conn = sqlite3.connect('recommendations.db')
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
@@ -83,64 +93,77 @@ def register():
         elif len(password) < 8 or not re.search(r'\d', password) or not re.search(r'[A-Z]', password):
             error = 'Password must be at least 8 characters long and contain at least one uppercase letter and one number.'
         else:
-            # Add the new user to the database
+           
             password_hash = generate_password_hash(password)
-            cursor.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password_hash))
+            cursor.execute('INSERT INTO users (username, password, profile_image) VALUES (?, ?, ?)', (username, password_hash, ''))
             conn.commit()
 
-            # Log the new user in
+           
             user_id = cursor.lastrowid
-            user_obj = User(user_id)
-            login_user(user_obj)
-            return redirect(url_for('search'))
+            registered_user = User(user_id, username)  # Create a new User object
+            login_user(registered_user)
+
+
+            conn.close()  
+
+            return redirect(url_for('profile'))
 
         conn.close()
-    else:
-        return render_template('register.html', error=error)
 
     return render_template('register.html', error=error)
 
 
 
+@app.route('/profile', methods=['GET', 'POST'])
+@login_required
+def profile():
+    if request.method == 'POST':
+        
+        if 'profile_image' in request.files:
+            profile_image = request.files['profile_image']
+            if profile_image.filename != '':
+                
+                profile_image.save('static/profile_images/' + current_user.username + '.jpg')
+                flash('Profile image uploaded successfully.')
+
+    return render_template('profile.html')
 
 
-
-# Search page
-# Search page
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    if not current_user.is_authenticated:
-        return redirect(url_for('login'))
-
     if request.method == 'POST':
-        # Get selected options
         genre = request.form.get('genre')
         platform = request.form.get('platform')
 
-        # Query the database based on selected options
         conn = sqlite3.connect('recommendations.db')
         cursor = conn.cursor()
-        if genre == 'all' and platform == 'all':
-            cursor.execute('SELECT * FROM series ORDER BY RANDOM() LIMIT 1')
-        elif genre == 'all':
-            cursor.execute('SELECT * FROM series WHERE platform = ? ORDER BY RANDOM() LIMIT 1', (platform,))
-        elif platform == 'all':
-            cursor.execute('SELECT * FROM series WHERE genre = ? ORDER BY RANDOM() LIMIT 1', (genre,))
-        else:
-            cursor.execute('SELECT * FROM series WHERE genre = ? AND platform = ? ORDER BY RANDOM() LIMIT 1', (genre, platform))
-
-        series = cursor.fetchone()
+        cursor.execute('SELECT * FROM series WHERE genre = ? AND platform = ?', (genre, platform))
+        series = cursor.fetchall()
         conn.close()
 
-        if series is None:
-            return render_template('search.html', error='No series found.')
+        return render_template('results.html', genre=genre, platform=platform, series=series)
 
-        return render_template('search.html', series=series)
+    return redirect(url_for('search'))
 
-    return render_template('search.html')
 
+
+@app.route('/results', methods=['GET', 'POST'])
+def results():
+    if request.method == 'POST':
+        genre = request.form['genre']
+        platform = request.form['platform']
+
+        conn = sqlite3.connect('recommendations.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM series WHERE genre = ? AND platform = ?', (genre, platform))
+        series = cursor.fetchall()
+        conn.close()
+
+        return render_template('results.html', genre=genre, platform=platform, series=series)
+
+    return redirect(url_for('index'))
 
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port = 38983)
+    app.run(debug=True, port=56792)
