@@ -21,21 +21,25 @@ switchButtons.forEach((switchBtn) => {
   });
 });
 
-
 searchForm.addEventListener('submit', function(e) {
-  e.preventDefault(); 
+  e.preventDefault();
 
   const genre = document.querySelector("#genre").value;
   const platform = document.querySelector("#platform").value;
 
- 
-  fetch(`${searchResultsUrl}?genre=${genre}&platform=${platform}`, { method: 'POST' })
-    .then(response => response.text())
-    .then(data => {
-      
-      document.querySelector("#results").innerHTML = data;
+  fetch(saveSearchUrl, {
+    method: 'POST',
+    body: new URLSearchParams({
+      genre: genre,
+      platform: platform
     })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+  })
+  .then(response => response.text())
+  .then(data => {
+    document.querySelector("#results").innerHTML = data;
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
 });
+

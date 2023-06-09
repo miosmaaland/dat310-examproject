@@ -130,10 +130,18 @@ def profile():
 
 
 @app.route('/search', methods=['GET', 'POST'])
+@login_required
 def search():
     if request.method == 'POST':
         genre = request.form.get('genre')
         platform = request.form.get('platform')
+        user_id = current_user.id
+
+        conn = sqlite3.connect('recommendations.db')
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO searches (user_id, genre, platform) VALUES (?, ?, ?)', (user_id, genre, platform))
+        conn.commit()
+        conn.close()
 
         conn = sqlite3.connect('recommendations.db')
         cursor = conn.cursor()
@@ -145,24 +153,37 @@ def search():
 
     return redirect(url_for('search'))
 
-
-
 @app.route('/results', methods=['GET', 'POST'])
 def results():
     if request.method == 'POST':
-        genre = request.form['genre']
-        platform = request.form['platform']
+        genre = request.form.get('genre')
+        platform = request.form.get('platform')
+        user_id = None
+        if current_user.is_authenticated:
+            user_id = current_user.id
 
         conn = sqlite3.connect('recommendations.db')
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM series WHERE genre = ? AND platform = ?', (genre, platform))
-        series = cursor.fetchall()
+        cursor.execute('INSERT INTO searches (user_id, genre, platform) VALUES (?, ?, ?)', (user_id, genre, platform))
+        conn.commit()
         conn.close()
 
+        conn = sqlite3.connect('recommendations.db')
+        c = conn.cursor()
+        if genre == 'all' and platform == 'all':
+            c.execute('SELECT * FROM series')
+        elif genre == 'all':
+            c.execute('SELECT * FROM series WHERE platform=?', (platform,))
+        elif platform == 'all':
+            c.execute('SELECT * FROM series WHERE genre=?', (genre,))
+        else:
+            c.execute('SELECT * FROM series WHERE genre=? AND platform=?', (genre, platform))
+        series = c.fetchall()
+        conn.close()
         return render_template('results.html', genre=genre, platform=platform, series=series)
 
-    return redirect(url_for('index'))
-
+    # Method not allowed for GET requests
+    return redirect(url_for('search'))
 
 
 if __name__ == '__main__':

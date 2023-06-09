@@ -47,43 +47,43 @@ c.executemany('INSERT INTO users (username, password) VALUES (?, ?)', users)
 
 series = [
     # Action
-    ('Game of Thrones', 'Action', 'HBO'),
-    ('Stranger Things', 'Action', 'Netflix'),
-    ('The Boys', 'Action', 'Amazon Prime'),
+    ('Game of Thrones', 'action', 'hbo'),
+    ('Stranger Things', 'action', 'netflix'),
+    ('The Boys', 'action', 'amazon'),
 
-    # Comedy
-    ('The Office', 'Comedy', 'Netflix'),
-    ('Brooklyn Nine-Nine', 'Comedy', 'Hulu'),
-    ('How I Met Your Mother', 'Comedy', 'Disney+'),
+    # comedy
+    ('the office', 'comedy', 'netflix'),
+    ('brooklyn nine-nine', 'comedy', 'hulu'),
+    ('how i met your mother', 'comedy', 'disney'),
 
-    # Drama
-    ('Breaking Bad', 'Drama', 'Netflix'),
-    ('The Crown', 'Drama', 'Netflix'),
-    ('Chernobyl', 'Drama', 'HBO'),
+    # drama
+    ('breaking bad', 'drama', 'netflix'),
+    ('the crown', 'drama', 'netflix'),
+    ('chernobyl', 'drama', 'hbo'),
 
-    # Romance
-    ('Friends', 'Romance', 'Netflix'),
-    ('Outlander', 'Romance', 'Starz'),
+    # romance
+    ('friends', 'romance', 'netflix'),
+    ('outlander', 'romance', 'starz'),
 
-    # Anime
-    ('Attack on Titan', 'Anime', 'Netflix'),
-    ('One Piece', 'Anime', 'Hulu'),
+    # anime
+    ('attack on titan', 'anime', 'netflix'),
+    ('one piece', 'anime', 'hulu'),
 
-    # Thriller
-    ('Money Heist', 'Thriller', 'Netflix'),
-    ('True Detective', 'Thriller', 'HBO'),
+    # thriller
+    ('money heist', 'thriller', 'netflix'),
+    ('true detective', 'thriller', 'hbo'),
 
-    # Additional series
-    ('Modern Family', 'Comedy', 'Netflix'),
-    ('Westworld', 'Sci-Fi', 'HBO'),
-    ('The Mandalorian', 'Sci-Fi', 'Disney+'),
-    ('The Witcher', 'Fantasy', 'Netflix'),
-    ('The Handmaid\'s Tale', 'Drama', 'Hulu'),
-    ('The Marvelous Mrs. Maisel', 'Comedy', 'Amazon Prime'),
-    ('Breaking Bad', 'Crime', 'AMC'),
-    ('Stranger Things', 'Horror', 'Netflix'),
-    ('Friends', 'Comedy', 'NBC'),
-    ('The Big Bang Theory', 'Comedy', 'Netflix'),
+    # additional series
+    ('modern family', 'comedy', 'netflix'),
+    ('westworld', 'sci-fi', 'hbo'),
+    ('the mandalorian', 'sci-fi', 'disney+'),
+    ('the witcher', 'fantasy', 'netflix'),
+    ('the handmaid\'s tale', 'drama', 'hulu'),
+    ('the marvelous mrs. maisel', 'comedy', 'amazon prime'),
+    ('breaking bad', 'crime', 'amc'),
+    ('stranger things', 'horror', 'netflix'),
+    ('friends', 'comedy', 'nbc'),
+    ('the big bang theory', 'comedy', 'netflix')
 ]
 
 c.executemany('INSERT INTO series (name, genre, platform) VALUES (?, ?, ?)', series)
