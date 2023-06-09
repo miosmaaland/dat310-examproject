@@ -1,29 +1,29 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>My List</h1>
-  <form action="{{ url_for('delete_series') }}" method="POST">
-    <table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Genre</th>
-          <th>Platform</th>
-          <th>Delete</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for serie in series %}
-          <tr>
-            <td>{{ serie[1] }}</td>
-            <td>{{ serie[2] }}</td>
-            <td>{{ serie[3] }}</td>
-            <td>
-              <button type="submit" name="series_id_{{ serie[0] }}">Delete</button>
-            </td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </form>
+  <h1>My Series List</h1>
+  <table>
+    <tr>
+      <th>Title</th>
+      <th>Genre</th>
+      <th>Platform</th>
+      <th>Actions</th>
+    </tr>
+    {% for series in series %}
+      <tr>
+        <td>{{ series[1] }}</td>
+        <td>{{ series[2] }}</td>
+        <td>{{ series[3] }}</td>
+        <td>
+          <form method="POST" action="/series_list">
+            <input type="hidden" name="series_id" value="{{ series[0] }}">
+            <input type="text" name="new_genre" placeholder="New Genre">
+            <input type="text" name="new_platform" placeholder="New Platform">
+            <button type="submit" name="update">Update</button>
+            <button type="submit" name="delete">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
 {% endblock %}
