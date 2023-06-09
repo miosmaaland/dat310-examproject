@@ -63,15 +63,15 @@ c.execute('''
 
 
 # Insert sample data
-password = generate_password_hash('Mio123')
+password = generate_password_hash('Mio12345')
 users = [('Mio', password)]
 c.executemany('INSERT INTO users (username, password) VALUES (?, ?)', users)
 
 series = [
     # Action
-    ('Game of Thrones', 'action', 'hbo'),
-    ('Stranger Things', 'action', 'netflix'),
-    ('The Boys', 'action', 'amazon'),
+    ('game of thrones', 'action', 'hbo'),
+    ('stranger things', 'action', 'netflix'),
+    ('the boys', 'action', 'amazon'),
 
     # comedy
     ('the office', 'comedy', 'netflix'),
@@ -98,7 +98,7 @@ series = [
     # additional series
     ('modern family', 'comedy', 'netflix'),
     ('westworld', 'sci-fi', 'hbo'),
-    ('the mandalorian', 'sci-fi', 'disney+'),
+    ('the mandalorian', 'sci-fi', 'disney'),
     ('the witcher', 'fantasy', 'netflix'),
     ('the handmaid\'s tale', 'drama', 'hulu'),
     ('the marvelous mrs. maisel', 'comedy', 'amazon prime'),
