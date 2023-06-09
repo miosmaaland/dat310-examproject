@@ -135,23 +135,39 @@ def search():
     if request.method == 'POST':
         genre = request.form.get('genre')
         platform = request.form.get('platform')
+        user_id = current_user.id
 
         conn = sqlite3.connect('recommendations.db')
         cursor = conn.cursor()
-        cursor.execute('INSERT INTO searches (user_id, genre, platform) VALUES (?, ?, ?)',
-                       (current_user.id, genre, platform))
+        cursor.execute('INSERT INTO searches (user_id, genre, platform) VALUES (?, ?, ?)', (user_id, genre, platform))
         conn.commit()
         conn.close()
 
-        return redirect(url_for('results'))
+        conn = sqlite3.connect('recommendations.db')
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM series WHERE genre = ? AND platform = ?', (genre, platform))
+        series = cursor.fetchall()
+        conn.close()
 
-    return render_template('search.html')
+        return render_template('results.html', genre=genre, platform=platform, series=series)
+
+    return redirect(url_for('search'))
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
     if request.method == 'POST':
         genre = request.form.get('genre')
         platform = request.form.get('platform')
+        user_id = None
+        if current_user.is_authenticated:
+            user_id = current_user.id
+
+        conn = sqlite3.connect('recommendations.db')
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO searches (user_id, genre, platform) VALUES (?, ?, ?)', (user_id, genre, platform))
+        conn.commit()
+        conn.close()
+
         conn = sqlite3.connect('recommendations.db')
         c = conn.cursor()
         if genre == 'all' and platform == 'all':
@@ -168,6 +184,7 @@ def results():
 
     # Method not allowed for GET requests
     return redirect(url_for('search'))
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=56792)

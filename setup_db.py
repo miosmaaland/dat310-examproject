@@ -54,7 +54,7 @@ series = [
     # comedy
     ('the office', 'comedy', 'netflix'),
     ('brooklyn nine-nine', 'comedy', 'hulu'),
-    ('how i met your mother', 'comedy', 'disney+'),
+    ('how i met your mother', 'comedy', 'disney'),
 
     # drama
     ('breaking bad', 'drama', 'netflix'),

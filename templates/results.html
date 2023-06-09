@@ -1,14 +1,23 @@
-{% extends 'base.html' %}
-
-{% block content %}
-  <h1>Search Results</h1>
+<head>
+  <title>Results</title>
+</head>
+<body>
+  <h2>Search Results:</h2>
   <p>Genre: {{ genre }}</p>
   <p>Platform: {{ platform }}</p>
-
-  <h2>Results:</h2>
-  <ul>
-    {% for serie in series %}
-      <li>{{ serie[1] }}</li>
-    {% endfor %}
-  </ul>
-{% endblock %}
+  {% if series %}
+      <ul>
+          {% for series in series %}
+              <li>{{ series[1] }} - {{ series[2] }} ({{ series[3] }})</li>
+              <form method="POST" action="{{ url_for('home') }}">
+                  <input type="hidden" name="series_id" value="{{ series[0] }}">
+                  <input type="submit" value="Add to List">
+              </form>
+          {% endfor %}
+      </ul>
+  {% else %}
+      <p>No series found.</p>
+  {% endif %}
+  <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+</body>
+</html>
