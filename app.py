@@ -190,6 +190,7 @@ def series_list():
         conn = sqlite3.connect('recommendations.db')
         cursor = conn.cursor()
         cursor.execute('INSERT INTO user_series (user_id, series_id) VALUES (?, ?)', (user_id, series_id))
+        cursor.execute('INSERT INTO user_series2 (user_id, series_id) VALUES (?, ?)', (user_id, series_id))
         conn.commit()
         conn.close()
 
@@ -227,6 +228,55 @@ def delete_series():
         flash('Error deleting the series.')
 
     return redirect(url_for('series_list'))
+
+@app.route('/submit_series', methods=['POST'])
+@login_required
+def submit_series():
+    series_name = request.form.get('series_name')
+    genre = request.form.get('genre')
+    platform = request.form.get('platform')
+
+    # Perform any necessary validation on the input data
+
+    conn = sqlite3.connect('recommendations.db')
+    cursor = conn.cursor()
+    try:
+        cursor.execute('INSERT INTO series (name, genre, platform) VALUES (?, ?, ?)', (series_name, genre, platform))
+        conn.commit()
+        flash('Series submitted successfully.', 'success')
+    except sqlite3.Error as e:
+        conn.rollback()
+        flash(f'Error submitting series: {str(e)}', 'error')
+    finally:
+        conn.close()
+
+    return redirect(url_for('index'))
+
+
+@app.route('/trending')
+def trending():
+    conn = sqlite3.connect('recommendations.db')
+    cursor = conn.cursor()
+
+    # Get the most searched genres
+    cursor.execute('SELECT genre, COUNT(*) as count FROM searches GROUP BY genre ORDER BY count DESC LIMIT 5')
+    genre_data = cursor.fetchall()
+
+    # Get the most searched platforms
+    cursor.execute('SELECT platform, COUNT(*) as count FROM searches GROUP BY platform ORDER BY count DESC LIMIT 5')
+    platform_data = cursor.fetchall()
+
+    # Get the most added series
+    cursor.execute('SELECT series.id, series.name, series.genre, series.platform, COUNT(user_series2.series_id) as count FROM series LEFT JOIN user_series2 ON series.id = user_series2.series_id GROUP BY series.id ORDER BY count DESC LIMIT 5')
+    series_data = cursor.fetchall()
+
+    conn.close()
+
+    return render_template('trending.html', genres=genre_data, platforms=platform_data, series=series_data)
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True, port=56792)

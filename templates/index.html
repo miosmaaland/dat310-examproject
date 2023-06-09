@@ -12,8 +12,10 @@
         <li><a class="home-link" href="{{ url_for('index') }}">Home</a></li>
         {% if current_user.is_authenticated %}
         <li><a href="{{ url_for('series_list') }}">Lists</a></li>
+        <li><a href="{{ url_for('trending') }}">Trending</a></li>
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
           <li><a href="{{ url_for('logout') }}">Logout</a></li>
+          
         {% else %}
           <li><a class="login-link" href="{{ url_for('login') }}">Login</a></li>
         {% endif %}
@@ -56,7 +58,39 @@
           
             <button type="submit">Search</button>
           </form>
-          
+
+          <h2>Add New Series:</h2>
+<form action="{{ url_for('submit_series') }}" method="POST">
+  <div>
+    <label for="series_name">Series Name:</label>
+    <input type="text" id="series_name" name="series_name" required>
+  </div>
+  <div class="form-group">
+    <label for="genre">Genre:</label>
+    <select id="genre" name="genre">
+      <option value="comedy">Comedy</option>
+      <option value="drama">Drama</option>
+      <option value="action">Action</option>
+      <option value="thriller">Thriller</option>
+      <option value="sci-fi">Sci-Fi</option>
+      <option value="fantasy">Fantasy</option>
+      </select>
+      </div>
+      
+            <div class="form-group">
+              <label for="platform">Streaming Platform:</label>
+              <select id="platform" name="platform">
+                <option value="netflix">Netflix</option>
+                <option value="amazon">Amazon Prime Video</option>
+                <option value="hulu">Hulu</option>
+                <option value="disney">Disney+</option>
+                <option value="hbo">HBO Max</option>
+              </select>
+            </div>
+  <div>
+    <input type="submit" value="Submit">
+  </div>
+</form>
             </div>
             <script src="{{ url_for('static', filename='script.js') }}"></script>
           </body>

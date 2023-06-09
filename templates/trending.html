@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trending</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>Trending</h1>
+
+    <div class="card">
+      <div class="card-header">
+        Most Searched Genres
+      </div>
+      <div class="card-body">
+        {% if genres %}
+          <ul class="list-group">
+            {% for genre, count in genres %}
+              <li class="list-group-item">{{ genre }} - {{ count }} searches</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No genre data available.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        Most Searched Platforms
+      </div>
+      <div class="card-body">
+        {% if platforms %}
+          <ul class="list-group">
+            {% for platform, count in platforms %}
+              <li class="list-group-item">{{ platform }} - {{ count }} searches</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No platform data available.</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        Most Added Series
+      </div>
+      <div class="card-body">
+        {% if series %}
+          <ul class="list-group">
+            {% for series_item in series %}
+              <li class="list-group-item">{{ series_item[1] }} - {{ series_item[4] }} additions</li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p>No series data available.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>
