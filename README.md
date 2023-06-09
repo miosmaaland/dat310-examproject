@@ -12,7 +12,7 @@ This page displays the corresponding series to the earlier chosen genres and pla
 This page shows a list of all the series the user has added. Here the user has the option to delete series of their choosing from their own list.
 
 - Trending
-This page retrieves data from the tables searches and user_series2 in the database recommendations.db and uses it to set up 3 lists which display the most popular genres, platforms and series. It also shows how many times the genres and platforms have been searched and also how many times the series has been added to personal lists.
+This page retrieves data from the tables searches and user_series2 in the database recommendations.db and uses it to set up 3 lists which display the most popular genres, platforms and series bewteen all the users. It also shows how many times the genres and platforms have been searched and also how many times the series has been added to personal lists.
 
 - Recommendations.db
     -user.series
