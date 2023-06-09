@@ -2,10 +2,10 @@
 Mio and Rich's exam project for Dat310
 
 - How to run
-How to run the website? To run the 
+How to run the website? To run the website you need to run the app.py and to access the website use the address given when running the code.
 
 - Instructions for testing
-To test the website you can use the premade account. The username for the account is Mio and the password is Mio12345. You can also try the website without logging in, but you will not have some functions available like making personal lists. To nagivate around the page you can use the navbar on the top of the page.
+To test the website you can use the premade account. The username for the account is Mio and the password is Mio12345. You can also try the website without logging in, but you will not have some functions available like making personal lists. To nagivate around the page you can use the navbar on the top of the page. You can also register a new account and test how the trending and lists will change depending on what you do with different accounts. 
 
 - functionality
     - Home
@@ -25,5 +25,19 @@ This page retrieves data from the tables searches and user_series2 in the databa
 
 
 - Recommendations.db
-    -user.series
-    This table is used in 
+In the setup_db.py we create 5 tables which are users, series, searches, user_series and user_series2. 
+    - users
+    This table is split into the three columns username, password and profile_image. This database is used when the user wants to register an new account. Then it inserts that data into the database. It is also used when a user logs in and checks if there is a corresponding account in the database. It is also used in the profile page then it inserts the uploaded picture to the table column.
+    - series
+    This table stores the information for series, platform and genres. It is used in the home page where you can submit series and it is also used in the result page where it displays all the data in the table.
+    - searches
+    This table is used to store all the search data the user gets when he searches for recommendations. It is also used in the trending page. In the trending it displays the data of the 5 most searched genres and platforms.
+    - user_series2
+    This table stores all the data the user gets when the user adds to their list in the series_list page. This is used in the trending page to display the 5 most added series to the users personal lists.
+    - user_series
+    This table stores all the data the user gets when the user adds to their list in the series_list page like in user_series2. The difference between user_series2 and user_series is that this table is specifically used for the series_list page and can be changed by deleting the added series on the page which will also delete the data in the table.
+
+
+- Javascript
+
+- REST API
