@@ -27,6 +27,11 @@ searchForm.addEventListener('submit', function(e) {
   const genre = document.querySelector("#genre").value;
   const platform = document.querySelector("#platform").value;
 
+  if (genre === '' || platform === '') {
+    alert("Please select both genre and platform.");
+    return;
+  }
+
   fetch(saveSearchUrl, {
     method: 'POST',
     body: new URLSearchParams({
@@ -42,6 +47,7 @@ searchForm.addEventListener('submit', function(e) {
     console.error('Error:', error);
   });
 });
+
 document.getElementById('addToListForm').addEventListener('submit', function(event) {
   event.preventDefault();
   var form = event.target;
@@ -49,10 +55,11 @@ document.getElementById('addToListForm').addEventListener('submit', function(eve
   var xhr = new XMLHttpRequest();
   xhr.open(form.method, form.action, true);
   xhr.onload = function() {
-      if (xhr.status === 200) {
-          window.location.href = '/results';
-      }
+    if (xhr.status === 200) {
+      window.location.href = '/results';
+    }
   };
   xhr.send(formData);
 });
+
 
