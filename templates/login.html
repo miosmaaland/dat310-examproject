@@ -6,6 +6,7 @@
       {{ error }}
     </div>
   {% endif %}
+<<<<<<< HEAD
   <div class="container mt-5">
     <h1>Login</h1>
 
@@ -24,4 +25,22 @@
   </div>
 
   <link rel="stylesheet" type="text/css" href="../static/style.css">
+=======
+  <h1>Login</h1>
+  <link rel="stylesheet" type="text/css" href="../static/style.css">
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+
+  <form method="POST">
+    <div class="form-group">
+      <label for="username">Username:</label>
+      <input type="text" class="form-control" id="username" name="username">
+    </div>
+    <div class="form-group">
+      <label for="password">Password:</label>
+      <input type="password" class="form-control" id="password" name="password">
+    </div>
+    <button type="submit" class="btn btn-primary">Login</button>
+    <a href="{{ url_for('register') }}">Register</a>
+  </form>
+>>>>>>> d211b2ba5c1683bac2d45b4993ce0ee6e90a32f8
 {% endblock %}

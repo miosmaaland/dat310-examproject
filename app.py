@@ -184,43 +184,15 @@ def results():
 @login_required
 def series_list():
     if request.method == 'POST':
-        if 'delete' in request.form:
-            # Delete the series from the user's series list
-            series_id = request.form.get('series_id')
-            user_id = current_user.id
+        series_id = request.form.get('series_id')
+        user_id = current_user.id
 
-            conn = sqlite3.connect('recommendations.db')
-            cursor = conn.cursor()
-            cursor.execute('DELETE FROM user_series WHERE user_id = ? AND series_id = ?', (user_id, series_id))
-            conn.commit()
-            conn.close()
-
-            flash('Series deleted from your list.')
-        elif 'update' in request.form:
-            # Update the series details
-            series_id = request.form.get('series_id')
-            new_genre = request.form.get('new_genre')
-            new_platform = request.form.get('new_platform')
-
-            conn = sqlite3.connect('recommendations.db')
-            cursor = conn.cursor()
-            cursor.execute('UPDATE series SET genre = ?, platform = ? WHERE id = ?', (new_genre, new_platform, series_id))
-            conn.commit()
-            conn.close()
-
-            flash('Series updated successfully.')
-        else:
-            # Add a new series to the user's series list
-            series_id = request.form.get('series_id')
-            user_id = current_user.id
-
-            conn = sqlite3.connect('recommendations.db')
-            cursor = conn.cursor()
-            cursor.execute('INSERT INTO user_series (user_id, series_id) VALUES (?, ?)', (user_id, series_id))
-            conn.commit()
-            conn.close()
-
-            flash('Series added to your list.')
+        conn = sqlite3.connect('recommendations.db')
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO user_series (user_id, series_id) VALUES (?, ?)', (user_id, series_id))
+        cursor.execute('INSERT INTO user_series2 (user_id, series_id) VALUES (?, ?)', (user_id, series_id))
+        conn.commit()
+        conn.close()
 
     user_id = current_user.id
 
@@ -256,7 +228,6 @@ def delete_series():
         flash('Error deleting the series.')
 
     return redirect(url_for('series_list'))
-
 
 @app.route('/submit_series', methods=['POST'])
 @login_required
@@ -304,5 +275,8 @@ def trending():
     return render_template('trending.html', genres=genre_data, platforms=platform_data, series=series_data)
 
 
+
+
+
 if __name__ == '__main__':
-    app.run(debug=True, port=56792)
+    app.run(debug=True, port=56793)

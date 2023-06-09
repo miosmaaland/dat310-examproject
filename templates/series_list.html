@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<<<<<<< HEAD
   <div class="container mt-5">
     <h1>My Series List</h1>
     <table class="table table-striped">
@@ -30,10 +31,35 @@
                   </div>
                 </div>
               </form>
+=======
+  <h1>My List</h1>
+  <form action="{{ url_for('delete_series') }}" method="POST">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Genre</th>
+          <th>Platform</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for serie in series %}
+          <tr>
+            <td>{{ serie[1] }}</td>
+            <td>{{ serie[2] }}</td>
+            <td>{{ serie[3] }}</td>
+            <td>
+              <button type="submit" name="series_id_{{ serie[0] }}">Delete</button>
+>>>>>>> d211b2ba5c1683bac2d45b4993ce0ee6e90a32f8
             </td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
+<<<<<<< HEAD
   </div>
+=======
+  </form>
+>>>>>>> d211b2ba5c1683bac2d45b4993ce0ee6e90a32f8
 {% endblock %}

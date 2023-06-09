@@ -5,6 +5,7 @@
   <title>GenreFlix</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+<<<<<<< HEAD
 </head>
 <body>
   <header>
@@ -41,6 +42,24 @@
           </ul>
         </div>
       </div>
+=======
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+  <header>
+    <nav>
+      <ul>
+        <li><a class="home-link" href="{{ url_for('index') }}">Home</a></li>
+        {% if current_user.is_authenticated %}
+        <li><a href="{{ url_for('series_list') }}">Lists</a></li>
+        <li><a href="{{ url_for('trending') }}">Trending</a></li>
+          <li><a href="{{ url_for('profile') }}">Profile</a></li>
+          <li><a href="{{ url_for('logout') }}">Logout</a></li>
+        {% else %}
+          <li><a class="login-link" href="{{ url_for('login') }}">Login</a></li>
+        {% endif %}
+      </ul>
+>>>>>>> d211b2ba5c1683bac2d45b4993ce0ee6e90a32f8
     </nav>
   </header>
 

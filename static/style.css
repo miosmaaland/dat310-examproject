@@ -1,121 +1,235 @@
-/* Global Styles */
+
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: Verdana, Geneva, Tahoma, sans-serif, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f7f7f7;
 }
 
 .container {
-  max-width: 600px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 20px;
 }
 
-h1, h2 {
+h1, h2, h3 {
   color: #333;
 }
 
-/* Header Styles */
-header {
-  background-color: #333;
-  padding: 10px;
-  color: #fff;
+p {
+  color: #666;
 }
 
-nav ul {
+ul {
   list-style: none;
-  margin: 0;
   padding: 0;
 }
 
-nav ul li {
-  display: inline;
-  margin-right: 10px;
-}
-
-nav ul li a {
-  color: #fff;
-  text-decoration: none;
-}
-
-nav ul li a:hover {
-  text-decoration: underline;
-}
-
-/* Form Styles */
-.form-group {
+li {
   margin-bottom: 10px;
 }
 
-label {
-  display: block;
-  margin-bottom: 5px;
+form {
+  margin-bottom: 20px;
+  
 }
 
 input[type="text"],
 input[type="password"],
 select {
   width: 100%;
-  padding: 5px;
-  font-size: 14px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
 }
 
-button[type="submit"] {
-  padding: 10px 20px;
-  background-color: #333;
-  color: #fff;
+button {
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
   border: none;
+  border-radius: 4px;
   cursor: pointer;
 }
 
-button[type="submit"]:hover {
-  background-color: #555;
-}
 
-/* Footer Styles */
-footer {
+
+header {
   background-color: #333;
-  padding: 10px;
-  color: #fff;
-  text-align: center;
+  color: white;
+  padding: 20px;
 }
 
-/* Index Page Styles */
+nav ul {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li {
+  display: inline-block;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  padding: 5px 10px;
+}
+
 .home-link {
   font-weight: bold;
 }
 
 .login-link {
-  color: #fff;
-  text-decoration: underline;
+  background-color: #4CAF50;
+  padding: 8px 16px;
+  color: white;
+  border-radius: 4px;
+  text-decoration: none;
 }
 
-/* Search Page Styles */
+.login-link:hover {
+  background-color: #45a049;
+}
+
+
+
+.alert {
+  background-color: #f44336;
+  color: white;
+  padding: 10px;
+  margin-bottom: 20px;
+}
+
+
+
+.card {
+  background-color: #f9f9f9;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: #333;
+  color: white;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.card-body {
+  margin-bottom: 10px;
+}
+
+
+
 table {
   width: 100%;
   border-collapse: collapse;
 }
 
-th, td {
-  padding: 10px;
+table th,
+table td {
+  padding: 8px;
+  border: 1px solid #ddd;
   text-align: left;
 }
 
-th {
-  background-color: #333;
-  color: #fff;
-}
-
-tr:nth-child(even) {
+table th {
   background-color: #f2f2f2;
 }
 
-/* Other Styles */
-.alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border: 1px solid #ebccd1;
-  padding: 10px;
-  margin-bottom: 10px;
+
+
+.profile-image img {
+  max-width: 200px;
+  height: auto;
+  margin-top: 10px;
 }
+
+
+
+#homepage-link {
+  display: block;
+  margin-top: 20px;
+}
+
+#homepage-link:hover {
+  text-decoration: underline;
+}
+
+
+
+.results-container {
+  margin-top: 20px;
+}
+
+
+
+footer {
+  background-color: #333;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+
+
+.flex-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-item {
+  flex: 1 0 300px;
+  margin: 10px;
+}
+
+
+
+.absolute-container {
+  position: relative;
+  height: 500px;
+}
+
+.absolute-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+
+
+
+
+@media only screen and (max-width: 1800px) {
+  .container {
+    padding: 10px;
+  }
+}
+
+@media only screen and (max-width: 800px) {
+  .container {
+    padding: 5px;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .flex-item {
+    flex: 1 0 100%;
+  }
+}
+
+
