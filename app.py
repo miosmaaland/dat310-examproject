@@ -272,10 +272,14 @@ def trending():
 
     conn.close()
 
-    return render_template('trending.html', genres=genre_data, platforms=platform_data, series=series_data)
+    # Generate a random image URL for each series
+    series_with_images = []
+    for series_item in series_data:
+        series_id, series_name, series_genre, series_platform, series_count = series_item
+        random_image_url = random_image_url()  # Function to generate a random image URL
+        series_with_images.append((series_id, series_name, series_genre, series_platform, series_count, random_image_url))
 
-
-
+    return render_template('trending.html', genres=genre_data, platforms=platform_data, series=series_with_images)
 
 
 if __name__ == '__main__':

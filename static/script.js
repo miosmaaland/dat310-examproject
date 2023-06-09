@@ -55,3 +55,15 @@ document.getElementById('addToListForm').addEventListener('submit', function(eve
   };
   xhr.send(formData);
 });
+
+    // Function to generate a random image URL
+    function random_image_url() {
+      // Use a placeholder image service URL
+      var imageServiceUrl = 'https://via.placeholder.com/';
+      // Generate a random number between 200 and 400 for the image width
+      var width = Math.floor(Math.random() * 200) + 200;
+      // Generate a random number between 200 and 400 for the image height
+      var height = Math.floor(Math.random() * 200) + 200;
+      // Return the complete image URL with the generated width and height
+      return imageServiceUrl + width + 'x' + height;
+    }
