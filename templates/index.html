@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>GenreFlix</title>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </head>
 <body>
   <header>
@@ -24,8 +25,12 @@
   </header>
 
   <div class="container">
+    
+    
+    </div>
+    
     <h1>Welcome to GenreFlix</h1>
-    <p>Discover and explore your favorite TV series based on genre and streaming platform.</p>
+    <p>Discover and explore your favorite TV series based on genre and streaming platform. Enjoy an immersive experience as you find new shows and binge-watch your way to entertainment.</p>
 
     <form method="POST" action="{{ url_for('results') }}">
 
@@ -92,7 +97,7 @@
   </div>
 </form>
             </div>
-            <script src="{{ url_for('static', filename='script.js') }}"></script>
+            
           </body>
           </html>
 
