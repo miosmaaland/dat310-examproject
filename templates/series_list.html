@@ -1,29 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h1>My Series List</h1>
-  <table>
-    <tr>
-      <th>Title</th>
-      <th>Genre</th>
-      <th>Platform</th>
-      <th>Actions</th>
-    </tr>
-    {% for series in series %}
-      <tr>
-        <td>{{ series[1] }}</td>
-        <td>{{ series[2] }}</td>
-        <td>{{ series[3] }}</td>
-        <td>
-          <form method="POST" action="/series_list">
-            <input type="hidden" name="series_id" value="{{ series[0] }}">
-            <input type="text" name="new_genre" placeholder="New Genre">
-            <input type="text" name="new_platform" placeholder="New Platform">
-            <button type="submit" name="update">Update</button>
-            <button type="submit" name="delete">Delete</button>
-          </form>
-        </td>
-      </tr>
-    {% endfor %}
-  </table>
+  <div class="container mt-5">
+    <h1>My Series List</h1>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Genre</th>
+          <th>Platform</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for series in series %}
+          <tr>
+            <td>{{ series[1] }}</td>
+            <td>{{ series[2] }}</td>
+            <td>{{ series[3] }}</td>
+            <td>
+              <form method="POST" action="/series_list">
+                <input type="hidden" name="series_id" value="{{ series[0] }}">
+                <div class="input-group">
+                  <input type="text" class="form-control" name="new_genre" placeholder="New Genre">
+                  <input type="text" class="form-control" name="new_platform" placeholder="New Platform">
+                  <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary" name="update">Update</button>
+                    <button type="submit" class="btn btn-danger" name="delete">Delete</button>
+                  </div>
+                </div>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock %}

@@ -1,24 +1,33 @@
+<!DOCTYPE html>
+<html>
 <head>
+  <meta charset="UTF-8">
   <title>Results</title>
   <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
 </head>
 <body>
-  <h2>Search Results:</h2>
-  <p>Genre: {{ genre }}</p>
-  <p>Platform: {{ platform }}</p>
-  {% if series %}
+  <div class="container mt-5">
+    <h2>Search Results:</h2>
+    <p>Genre: {{ genre }}</p>
+    <p>Platform: {{ platform }}</p>
+    {% if series %}
       <ul>
-          {% for series in series %}
-              <li>{{ series[1] }} - {{ series[2] }} ({{ series[3] }})</li>
-              <form id="addToListForm" method="POST" action="{{ url_for('series_list') }}">
-                  <input type="hidden" name="series_id" value="{{ series[0] }}">
-                  <button type="submit">Add to List</button>
-              </form>
-          {% endfor %}
+        {% for series in series %}
+          <li>{{ series[1] }} - {{ series[2] }} ({{ series[3] }})</li>
+          <form id="addToListForm" method="POST" action="{{ url_for('series_list') }}">
+            <input type="hidden" name="series_id" value="{{ series[0] }}">
+            <button type="submit" class="btn btn-primary">Add to List</button>
+          </form>
+        {% endfor %}
       </ul>
-  {% else %}
+    {% else %}
       <p>No series found.</p>
-  {% endif %}
-  <p><a href="{{ url_for('index') }}">Back to Home</a></p>
+    {% endif %}
+    <p><a href="{{ url_for('index') }}" class="btn btn-link">Back to Home</a></p>
+  </div>
+
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

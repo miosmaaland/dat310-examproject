@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Trending</title>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <title>Trending</title>
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
   <div class="container">
     <h1>Trending</h1>
 
-    <div class="card">
+    <div class="card mb-3">
       <div class="card-header">
         Most Searched Genres
       </div>
@@ -20,12 +21,12 @@
             {% endfor %}
           </ul>
         {% else %}
-          <p>No genre data available.</p>
+          <p class="text-muted">No genre data available.</p>
         {% endif %}
       </div>
     </div>
 
-    <div class="card">
+    <div class="card mb-3">
       <div class="card-header">
         Most Searched Platforms
       </div>
@@ -37,12 +38,12 @@
             {% endfor %}
           </ul>
         {% else %}
-          <p>No platform data available.</p>
+          <p class="text-muted">No platform data available.</p>
         {% endif %}
       </div>
     </div>
 
-    <div class="card">
+    <div class="card mb-3">
       <div class="card-header">
         Most Added Series
       </div>
@@ -54,10 +55,14 @@
             {% endfor %}
           </ul>
         {% else %}
-          <p>No series data available.</p>
+          <p class="text-muted">No series data available.</p>
         {% endif %}
       </div>
     </div>
   </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
