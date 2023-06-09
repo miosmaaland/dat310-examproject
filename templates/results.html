@@ -9,15 +9,15 @@
       <ul>
           {% for series in series %}
               <li>{{ series[1] }} - {{ series[2] }} ({{ series[3] }})</li>
-              <form method="POST" action="{{ url_for('home') }}">
+              <form id="addToListForm" method="POST" action="{{ url_for('series_list') }}">
                   <input type="hidden" name="series_id" value="{{ series[0] }}">
-                  <input type="submit" value="Add to List">
+                  <button type="submit">Add to List</button>
               </form>
           {% endfor %}
       </ul>
   {% else %}
       <p>No series found.</p>
   {% endif %}
-  <p><a href="{{ url_for('home') }}">Back to Home</a></p>
+  <p><a href="{{ url_for('index') }}">Back to Home</a></p>
 </body>
 </html>

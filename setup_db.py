@@ -39,6 +39,16 @@ c.execute('''
     )
 ''')
 
+# Create the list table
+c.execute('''
+    CREATE TABLE IF NOT EXISTS user_series (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        series_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users (id),
+        FOREIGN KEY (series_id) REFERENCES series (id)
+    )
+''')
 
 # Insert sample data
 password = generate_password_hash('Mio123')

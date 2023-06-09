@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>My List</h1>
+  <form action="{{ url_for('delete_series') }}" method="POST">
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Genre</th>
+          <th>Platform</th>
+          <th>Delete</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for serie in series %}
+          <tr>
+            <td>{{ serie[1] }}</td>
+            <td>{{ serie[2] }}</td>
+            <td>{{ serie[3] }}</td>
+            <td>
+              <button type="submit" name="series_id_{{ serie[0] }}">Delete</button>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </form>
+{% endblock %}

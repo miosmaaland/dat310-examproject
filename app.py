@@ -4,10 +4,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import sqlite3
 import re
 
-
 app = Flask(__name__)
 app.secret_key = 'my_secret_key'
-
 
 app.config['SESSION_COOKIE_SECURE'] = False
 
@@ -35,10 +33,10 @@ def load_user(user_id):
     return None
 
 
-
 @app.route('/')
 def index():
     return render_template('index.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -65,12 +63,14 @@ def login():
 
     return render_template('login.html', error=error)
 
+
 @app.route('/logout')
 @login_required
 def logout():
     logout_user()
     session.clear()
     return redirect(url_for('index'))
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -83,7 +83,6 @@ def register():
         username = request.form['username']
         password = request.form['password']
 
-       
         conn = sqlite3.connect('recommendations.db')
         cursor = conn.cursor()
         cursor.execute('SELECT * FROM users WHERE username = ?', (username,))
@@ -93,18 +92,15 @@ def register():
         elif len(password) < 8 or not re.search(r'\d', password) or not re.search(r'[A-Z]', password):
             error = 'Password must be at least 8 characters long and contain at least one uppercase letter and one number.'
         else:
-           
             password_hash = generate_password_hash(password)
             cursor.execute('INSERT INTO users (username, password, profile_image) VALUES (?, ?, ?)', (username, password_hash, ''))
             conn.commit()
 
-           
             user_id = cursor.lastrowid
             registered_user = User(user_id, username)  # Create a new User object
             login_user(registered_user)
 
-
-            conn.close()  
+            conn.close()
 
             return redirect(url_for('profile'))
 
@@ -113,16 +109,13 @@ def register():
     return render_template('register.html', error=error)
 
 
-
 @app.route('/profile', methods=['GET', 'POST'])
 @login_required
 def profile():
     if request.method == 'POST':
-        
         if 'profile_image' in request.files:
             profile_image = request.files['profile_image']
             if profile_image.filename != '':
-                
                 profile_image.save('static/profile_images/' + current_user.username + '.jpg')
                 flash('Profile image uploaded successfully.')
 
@@ -152,6 +145,7 @@ def search():
         return render_template('results.html', genre=genre, platform=platform, series=series)
 
     return redirect(url_for('search'))
+
 
 @app.route('/results', methods=['GET', 'POST'])
 def results():
@@ -185,6 +179,54 @@ def results():
     # Method not allowed for GET requests
     return redirect(url_for('search'))
 
+
+@app.route('/series_list', methods=['GET', 'POST'])
+@login_required
+def series_list():
+    if request.method == 'POST':
+        series_id = request.form.get('series_id')
+        user_id = current_user.id
+
+        conn = sqlite3.connect('recommendations.db')
+        cursor = conn.cursor()
+        cursor.execute('INSERT INTO user_series (user_id, series_id) VALUES (?, ?)', (user_id, series_id))
+        conn.commit()
+        conn.close()
+
+    user_id = current_user.id
+
+    conn = sqlite3.connect('recommendations.db')
+    cursor = conn.cursor()
+    cursor.execute('SELECT series.* FROM series INNER JOIN user_series ON series.id = user_series.series_id WHERE user_series.user_id = ?', (user_id,))
+    series = cursor.fetchall()
+    conn.close()
+
+    return render_template('series_list.html', series=series)
+
+
+@app.route('/delete_series', methods=['POST'])
+@login_required
+def delete_series():
+    series_id = None
+    for key in request.form:
+        if key.startswith('series_id_'):
+            series_id = key.split('_')[2]
+            break
+
+    if series_id is not None:
+        user_id = current_user.id
+
+        conn = sqlite3.connect('recommendations.db')
+        cursor = conn.cursor()
+        cursor.execute('DELETE FROM user_series WHERE user_id = ? AND series_id = ?', (user_id, series_id))
+        conn.commit()
+        conn.close()
+
+        flash('Series deleted from your list.')
+    else:
+        flash('Error deleting the series.')
+
+    return redirect(url_for('series_list'))
 
 if __name__ == '__main__':
     app.run(debug=True, port=56792)

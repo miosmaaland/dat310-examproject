@@ -42,4 +42,16 @@ searchForm.addEventListener('submit', function(e) {
     console.error('Error:', error);
   });
 });
-
+document.getElementById('addToListForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  var form = event.target;
+  var formData = new FormData(form);
+  var xhr = new XMLHttpRequest();
+  xhr.open(form.method, form.action, true);
+  xhr.onload = function() {
+      if (xhr.status === 200) {
+          window.location.href = '/results';
+      }
+  };
+  xhr.send(formData);
+});
