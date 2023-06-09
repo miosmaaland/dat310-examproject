@@ -2,7 +2,7 @@
 Mio and Rich's exam project for Dat310
 
 - How to run
-How to run the website? To run the website you need to run the app.py and to access the website use the address given when running the code.
+How to run the website? To run the website you need to run the app.py and to access the website use the address given when running the code. You also need to pip install flask and werkzeug before running the code.
 
 - Instructions for testing
 To test the website you can use the premade account. The username for the account is Mio and the password is Mio12345. You can also try the website without logging in, but you will not have some functions available like making personal lists. To nagivate around the page you can use the navbar on the top of the page. You can also register a new account and test how the trending and lists will change depending on what you do with different accounts. 
