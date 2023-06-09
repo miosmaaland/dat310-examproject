@@ -11,7 +11,7 @@
       <ul>
         <li><a class="home-link" href="{{ url_for('index') }}">Home</a></li>
         {% if current_user.is_authenticated %}
-          <li><a href="{{ url_for('lists') }}">My list</a></li>
+          <li><a href="{{ url_for('series_list') }}">My list</a></li>
           <li><a href="{{ url_for('profile') }}">Profile</a></li>
           <li><a href="{{ url_for('trending') }}"></a>Trending</li>
           <li><a href="{{ url_for('logout') }}">Logout</a></li>
